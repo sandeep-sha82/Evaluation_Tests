@@ -1,1 +1,2 @@
 .login{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:24px}.login .start-card{width:min(410px,100%)}.login .brand-mark{margin-bottom:17px}.error{color:#b2392f;font-size:13px;margin:10px 0}.signout{padding:0;color:#5d6c65;font-size:13px}
+.danger-icon{width:36px;height:36px;display:inline-grid;place-items:center;border:1px solid #f0d7d3;border-radius:7px;background:#fff8f7;color:#bd3d32}.danger-icon:hover{background:#fff0ee}.question-title .danger-icon{margin-left:auto;flex:none}
