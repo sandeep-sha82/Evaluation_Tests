@@ -55,3 +55,5 @@ create policy "admins manage questions" on public.questions for all to authentic
   with check ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 create policy "admins read attempts" on public.attempts for select to authenticated
   using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+create policy "admins delete attempts" on public.attempts for delete to authenticated
+  using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
