@@ -19,8 +19,14 @@ create table public.questions (
   prompt text not null,
   options jsonb not null check (jsonb_array_length(options) = 4),
   answer integer not null check (answer between 0 and 3),
-  position integer not null default 0
+  position integer not null default 0,
+  media_url text,
+  media_type text
 );
+
+-- If the questions table already exists, run these two statements instead:
+-- alter table public.questions add column if not exists media_url text;
+-- alter table public.questions add column if not exists media_type text;
 
 create table public.attempts (
   id uuid primary key default gen_random_uuid(),
@@ -57,3 +63,11 @@ create policy "admins read attempts" on public.attempts for select to authentica
   using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 create policy "admins delete attempts" on public.attempts for delete to authenticated
   using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+
+-- Run in the SQL Editor to create public media storage for question audio/video.
+insert into storage.buckets (id, name, public) values ('assessment-media', 'assessment-media', true)
+on conflict (id) do nothing;
+create policy "admins upload question media" on storage.objects for insert to authenticated
+  with check (bucket_id = 'assessment-media' and (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+create policy "admins delete question media" on storage.objects for delete to authenticated
+  using (bucket_id = 'assessment-media' and (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
